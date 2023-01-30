@@ -1,59 +1,51 @@
 package com.company.DP;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 public class Longest_String_Chain {
     public static void main(String[] args) {
-//        String[] arr = {"a","b","ba","bca","bda","bcda"};
-        String[] arr = {"a","bc","ad","adc","bcd"};
-        ArrayList<Integer> dp = new ArrayList<>();
-        for(int i = 0;i < arr.length;i++) dp.add(1);
-        int ans = FindChain(arr,dp);
-        System.out.println(ans);
+        String[] arr = {"a","b","ba","bca","bda","bcda"};
+    }
+    public static int longestStrChain(int n, String[] arr) {
+        // Write your code here.
+
+        // Sorting the array as per the length of strings present in it
+        Arrays.sort(arr, (str1, str2) -> Integer.compare(str1.length(), str2.length()));
+        int result = HelperFunc(arr);
+        return result;
     }
 
-    static int FindChain(String[] arr, ArrayList<Integer> dp){
-        ArrayList<Integer> hash = new ArrayList<>();
-        for(int i = 0;i < arr.length;i++) hash.add(i);
-        int maxi = Integer.MIN_VALUE;
-
-        for (int i = 1;i < arr.length;i++){
-            for(int prev_element = 0;prev_element < i;prev_element++){
-                if(CompareString(arr[i],arr[prev_element]) && dp.get(i) < 1 + dp.get(prev_element)){
-                    dp.set(i,1+dp.get(prev_element));
-                    hash.set(i,prev_element);
-                    maxi = Math.max(maxi,dp.get(i));
+    static int HelperFunc(String[] arr){
+        int[] dpArr = new int[arr.length];
+        Arrays.fill(dpArr,1);
+        int maxi = 1;
+        for(int i = 0;i < arr.length; i++){
+            for(int prev_index = 0;prev_index < i; prev_index++){
+                if(comparePossible(arr[i],arr[prev_index])){
+                    dpArr[i] = 1 + dpArr[prev_index];
                 }
+            }
+            if(dpArr[i] > maxi){
+                maxi = dpArr[i];
             }
         }
         return maxi;
     }
 
-    static boolean CompareString(String A,String B){
-        HashMap<Character,Integer> hMap = new HashMap<>();
-        for (int i = 0;i < A.length();i++) {
-            char ch = A.charAt(i);
-            if(hMap.containsKey(ch)){
-                int count = hMap.get(ch);
-                hMap.put(ch,count+1);
-            }else hMap.put(ch,1);
-        }
-        int length = 0;
-        for (int i = 0;i < B.length();i++) {
-            char ch = B.charAt(i);
-            if(hMap.containsKey(ch)){
-                int count = hMap.get(ch);
-                hMap.put(ch,count-1);
-                if(hMap.get(ch) == 0) hMap.remove(ch);
-                length++;
+    static boolean comparePossible(String s1,String s2){
+        if(s1.length() != 1 + s2.length()) return false;
+        int i = 0;
+        int j = 0;
+
+        while(i < s1.length()){
+            if(j < s2.length() && s1.charAt(i) == s2.charAt(j)){
+                i++; j++;
+            }else{
+                i++;
             }
         }
 
-        if(length == 0) return false;
-
-        return Math.abs(hMap.size()-length) == 0;
+        if(i == s1.length() && j == s2.length()) return true;
+        return false;
     }
 }
