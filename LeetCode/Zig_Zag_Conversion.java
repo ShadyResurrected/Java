@@ -4,43 +4,38 @@ import java.util.*;
 
 public class Zig_Zag_Conversion {
     public static void main(String[] args) {
-        String s = "PAYPALISHIRING";
-        int numRows = 4;
+        String s = "AB";
+        int numRows = 1;
         String ans = convert(s,numRows);
         System.out.println(ans);
     }
-    static String convert(String s, int numRows) {
-        TreeMap<Integer, Character> tMap = new TreeMap<>();
 
+    static String convert(String s, int numRows) {
+
+        ArrayList<ArrayList<Character>> list = new ArrayList<>();
+
+        if(numRows == 1 || numRows == s.length()) return s;
+
+        for(int i = 0;i < numRows; i++) list.add(new ArrayList<>());
+
+        int row = 0;
+        boolean flip = false;
         for(int i = 0;i < s.length(); i++){
-            tMap.put(i,s.charAt(i));
+            char ch = s.charAt(i);
+            list.get(row).add(ch);
+
+            if(flip) row--;
+            else row++;
+
+            if(row == numRows-1 || row == 0){
+                flip = !flip;
+            }
         }
 
-        int gap = numRows;
         String res = "";
 
-        for(int i = 0;i < numRows; i++){
-            int pos = i;
-            while(pos < s.length() && gap > 1){
-                if(tMap.containsKey(pos)){
-                    res += tMap.get(pos);
-                    tMap.remove(pos);
-                }
-                pos += 2 * (gap-1);
-            }
-            if(gap > 0) gap--;
-            else break;
-        }
+        for(ArrayList<Character> ele : list) for(char ch : ele) res += ch;
 
-        //  Get all entries using the entrySet() method
-        Set<Map.Entry<Integer, Character> > entries
-                = tMap.entrySet();
-
-        // Way 1
-        // Using for loops
-        for (Map.Entry<Integer, Character> entry : entries) {
-            res += entry.getValue();
-        }
         return res;
     }
 }
