@@ -1,19 +1,11 @@
 package com.company.LeetCode;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.LinkedList;
+import java.util.*;
 
 public class Sliding_Window_Maximum {
     public static void main(String[] args) {
-        int[] nums = {7,2,4};
-        int k = 2;
-        ArrayList<Integer> list = new ArrayList<>();
-        Method1(k,nums,list);
-        ArrayList<Integer> res = new ArrayList<>();
-        Deque<Integer> deque = new LinkedList<>();
-        Method2(k,nums,res,deque);
-        System.out.println(res);
+        int[] nums = {9,10,9,-7,-4,-8,2,-6};
+        int k = 5;
     }
 
     // Optimised Approach
